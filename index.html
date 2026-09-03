@@ -910,7 +910,7 @@ button:hover {
                 <form
                     action="https://formsubmit.co/katanfredy@gmail.com"
                     method="POST"
-                    onsubmit="mostrarEnvio()"
+                    onsubmit="enviarRespuestas(event)"
                 >
 
                     <input
@@ -929,6 +929,27 @@ button:hover {
                         type="hidden"
                         name="_template"
                         value="table"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="Nombre de tu amiga"
+                        id="nombreAmigaEnviado"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="Todas las selecciones"
+                        id="seleccionesEnviadas"
+                    >
+
+                    <input
+                        type="text"
+                        name="Nombre"
+                        id="nombreAmiga"
+                        placeholder="Escribe tu nombre"
+                        autocomplete="name"
+                        required
                     >
 
                     <p>
@@ -1195,6 +1216,10 @@ const resultadoPregunta = document.getElementById("resultadoPregunta");
 
 opcionesPregunta.forEach(function(boton) {
     boton.addEventListener("click", function() {
+        opcionesPregunta.forEach(function(opcion) {
+            opcion.classList.remove("seleccionada");
+        });
+        boton.classList.add("seleccionada");
         resultadoPregunta.textContent = "Elegiste: " + boton.dataset.respuesta + " 💫";
     });
 });
@@ -1209,6 +1234,10 @@ const resultadoJuego = document.getElementById("resultadoJuego");
 
 opcionesJuego.forEach(function(boton) {
     boton.addEventListener("click", function() {
+        opcionesJuego.forEach(function(opcion) {
+            opcion.classList.remove("seleccionada");
+        });
+        boton.classList.add("seleccionada");
         if (boton.dataset.correcto === "true") {
             resultadoJuego.textContent = "¡Correcto! Esa sonrisa siempre gana. 🌻✨";
         } else {
@@ -1254,15 +1283,55 @@ function alternarMusica() {
    ENVIO DEL FORMULARIO
 ========================= */
 
-function mostrarEnvio() {
+async function enviarRespuestas(evento) {
 
-    setTimeout(function() {
+    evento.preventDefault();
 
-        alert(
-            "💌 Tus respuestas fueron enviadas. Gracias por responder 🌻"
-        );
+    const formulario = evento.target;
+    const nombre = document.getElementById("nombreAmiga").value.trim();
+    const selecciones = Array.from(
+        document.querySelectorAll(".opcion-pregunta.seleccionada, .juego-opcion.seleccionada")
+    ).map(function(opcion) {
+        return opcion.textContent.trim();
+    });
+    const medidor = document.querySelector('input[type="range"]');
+    const datos = new FormData(formulario);
 
-    }, 300);
+    datos.set("Nombre de tu amiga", nombre);
+    datos.set("Todas las selecciones", selecciones.join(" | ") +
+        (medidor ? " | Nivel de amistad: " + medidor.value : ""));
+
+    localStorage.setItem("respuestasAmiga", JSON.stringify({
+        nombre: nombre,
+        selecciones: selecciones,
+        nivelAmistad: medidor ? medidor.value : "",
+        pensamiento: datos.get("Pensamiento"),
+        felicidad: datos.get("Felicidad"),
+        guardadoEn: new Date().toISOString()
+    }));
+
+    const boton = formulario.querySelector('button[type="submit"]');
+    boton.disabled = true;
+    boton.textContent = "Enviando...";
+
+    try {
+        const respuesta = await fetch(formulario.action, {
+            method: "POST",
+            body: datos,
+            headers: { Accept: "application/json" }
+        });
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudo enviar");
+        }
+
+        boton.textContent = "Enviado ✓";
+        alert("💌 Las respuestas de " + nombre + " fueron enviadas. La página continuará aquí 🌻");
+    } catch (error) {
+        boton.disabled = false;
+        boton.textContent = "💌 Enviar respuestas";
+        alert("Las respuestas quedaron guardadas en este dispositivo, pero no se pudo enviar el correo. Revisa tu conexión e inténtalo de nuevo.");
+    }
 
 }
 
