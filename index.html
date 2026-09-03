@@ -495,6 +495,29 @@ textarea {
     margin-bottom: 15px;
 }
 
+#nombreAmiga {
+    display: block;
+    width: 100%;
+    margin: 14px 0 18px;
+    padding: 14px 16px;
+    border: 2px solid #2563eb;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #1e293b;
+    font: 16px Georgia, serif;
+    outline: none;
+    box-shadow: 0 0 12px rgba(37, 99, 235, .2);
+}
+
+#nombreAmiga::placeholder {
+    color: #64748b;
+}
+
+#nombreAmiga:focus {
+    border-color: #1d4ed8;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .2);
+}
+
 button {
     border: none;
     padding: 12px 20px;
@@ -532,6 +555,20 @@ button:hover {
     border: 1px solid #d8af52;
     width: 100%;
     font-weight: bold;
+}
+
+.opcion-pregunta.seleccionada {
+    background: #2563eb;
+    border-color: #1d4ed8;
+    color: white;
+    box-shadow: 0 0 18px rgba(37, 99, 235, .45);
+}
+
+.juego-opcion.seleccionada {
+    background: #2563eb;
+    border-color: #1d4ed8;
+    color: white;
+    box-shadow: 0 0 18px rgba(37, 99, 235, .45);
 }
 
 .resultado-pregunta,
@@ -820,14 +857,14 @@ button:hover {
                     id="amistad"
                     min="0"
                     max="100"
-                    value="80"
+                    value="0"
                 >
 
                 <div
                     class="mensaje-amistad"
                     id="mensajeAmistad"
                 >
-                    80% — Nada mal 😄
+                    0% — Elige el nivel de amistad
                 </div>
 
             </section>
@@ -840,6 +877,17 @@ button:hover {
                 <h2>
                     💭 Pregunta rápida
                 </h2>
+
+                <label for="nombreAmiga">Ponga su Nombre </label>
+                <input
+                    type="text"
+                    id="nombreAmiga"
+                    placeholder="Escribe su nombre"
+                    autocomplete="name"
+                    required
+                >
+
+                <p id="saludoPregunta">Elige una respuesta, <span class="nombre-amiga">tu amiga</span>:</p>
 
                 <p>
                     Si tuvieras que elegir un lugar para estar tranquila, ¿dónde irías?
@@ -873,6 +921,8 @@ button:hover {
                 <h2>
                     🎮 Juego del universo
                 </h2>
+
+                <p>Ahora responde, <span class="nombre-amiga">tu amiga</span>:</p>
 
                 <p>
                     ¿Qué te hace sonreír más en este momento?
@@ -943,14 +993,11 @@ button:hover {
                         id="seleccionesEnviadas"
                     >
 
-                    <input
-                        type="text"
-                        name="Nombre"
-                        id="nombreAmiga"
-                        placeholder="Escribe tu nombre"
-                        autocomplete="name"
-                        required
-                    >
+                    <input type="hidden" name="Respuesta del juego" id="respuestaJuegoEnviada">
+
+                    <input type="hidden" name="Nombre" id="nombreAmigaFormulario">
+
+                    <p>Estas respuestas son de <span class="nombre-amiga">tu amiga</span>:</p>
 
                     <p>
                         ¿Qué piensas cuando estás sola?
@@ -973,10 +1020,6 @@ button:hover {
                         required
                     ></textarea>
 
-
-                    <button type="submit">
-                        💌 Enviar respuestas
-                    </button>
 
                 </form>
 
@@ -1007,6 +1050,18 @@ button:hover {
                     algunas de las mejores historias
                     empiezan sin saber cómo van a terminar. ✨
                 </p>
+
+                <p class="firma-final">
+                    ATT: Lucio Katan
+                </p>
+
+                <button
+                    type="button"
+                    id="botonEnviarFinal"
+                    onclick="enviarDesdeElFinal()"
+                >
+                    💌 Enviar todo
+                </button>
 
             </section>
 
@@ -1176,6 +1231,8 @@ amistad.addEventListener("input", function() {
 
     const valor = amistad.value;
 
+    guardarRespuestas();
+
     if (valor < 30) {
 
         mensajeAmistad.textContent =
@@ -1220,6 +1277,7 @@ opcionesPregunta.forEach(function(boton) {
             opcion.classList.remove("seleccionada");
         });
         boton.classList.add("seleccionada");
+        guardarRespuestas();
         resultadoPregunta.textContent = "Elegiste: " + boton.dataset.respuesta + " 💫";
     });
 });
@@ -1238,6 +1296,7 @@ opcionesJuego.forEach(function(boton) {
             opcion.classList.remove("seleccionada");
         });
         boton.classList.add("seleccionada");
+        guardarRespuestas();
         if (boton.dataset.correcto === "true") {
             resultadoJuego.textContent = "¡Correcto! Esa sonrisa siempre gana. 🌻✨";
         } else {
@@ -1245,6 +1304,39 @@ opcionesJuego.forEach(function(boton) {
         }
     });
 });
+
+const nombreAmiga = document.getElementById("nombreAmiga");
+const nombreAmigaFormulario = document.getElementById("nombreAmigaFormulario");
+
+nombreAmiga.addEventListener("input", function() {
+    document.querySelectorAll(".nombre-amiga").forEach(function(elemento) {
+        elemento.textContent = nombreAmiga.value.trim() || "tu amiga";
+    });
+    guardarRespuestas();
+});
+
+function obtenerRespuestas() {
+    const selecciones = Array.from(
+        document.querySelectorAll(".opcion-pregunta.seleccionada, .juego-opcion.seleccionada")
+    ).map(function(opcion) {
+        return opcion.textContent.trim();
+    });
+    const formulario = document.querySelector("form");
+    const medidor = document.querySelector('input[type="range"]');
+
+    return {
+        nombre: nombreAmiga.value.trim(),
+        selecciones: selecciones,
+        nivelAmistad: medidor ? medidor.value : "",
+        pensamiento: formulario.elements.Pensamiento.value,
+        felicidad: formulario.elements.Felicidad.value,
+        guardadoEn: new Date().toISOString()
+    };
+}
+
+function guardarRespuestas() {
+    localStorage.setItem("respuestasAmiga", JSON.stringify(obtenerRespuestas()));
+}
 
 
 /* =========================
@@ -1289,6 +1381,14 @@ async function enviarRespuestas(evento) {
 
     const formulario = evento.target;
     const nombre = document.getElementById("nombreAmiga").value.trim();
+
+    if (!nombre) {
+        alert("Escribe el nombre de tu amiga antes de enviar.");
+        document.getElementById("nombreAmiga").focus();
+        return;
+    }
+
+    nombreAmigaFormulario.value = nombre;
     const selecciones = Array.from(
         document.querySelectorAll(".opcion-pregunta.seleccionada, .juego-opcion.seleccionada")
     ).map(function(opcion) {
@@ -1296,26 +1396,21 @@ async function enviarRespuestas(evento) {
     });
     const medidor = document.querySelector('input[type="range"]');
     const datos = new FormData(formulario);
+    const respuestaJuego = document.querySelector(".juego-opcion.seleccionada");
 
     datos.set("Nombre de tu amiga", nombre);
     datos.set("Todas las selecciones", selecciones.join(" | ") +
         (medidor ? " | Nivel de amistad: " + medidor.value : ""));
+    datos.set("Respuesta del juego", respuestaJuego ? respuestaJuego.textContent.trim() : "No seleccionada");
 
-    localStorage.setItem("respuestasAmiga", JSON.stringify({
-        nombre: nombre,
-        selecciones: selecciones,
-        nivelAmistad: medidor ? medidor.value : "",
-        pensamiento: datos.get("Pensamiento"),
-        felicidad: datos.get("Felicidad"),
-        guardadoEn: new Date().toISOString()
-    }));
+    guardarRespuestas();
 
-    const boton = formulario.querySelector('button[type="submit"]');
+    const boton = document.getElementById("botonEnviarFinal");
     boton.disabled = true;
     boton.textContent = "Enviando...";
 
     try {
-        const respuesta = await fetch(formulario.action, {
+        const respuesta = await fetch("https://formsubmit.co/ajax/katanfredy@gmail.com", {
             method: "POST",
             body: datos,
             headers: { Accept: "application/json" }
@@ -1333,6 +1428,10 @@ async function enviarRespuestas(evento) {
         alert("Las respuestas quedaron guardadas en este dispositivo, pero no se pudo enviar el correo. Revisa tu conexión e inténtalo de nuevo.");
     }
 
+}
+
+function enviarDesdeElFinal() {
+    document.querySelector("form").requestSubmit();
 }
 
 </script>
