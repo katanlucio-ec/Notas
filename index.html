@@ -1,0 +1,1273 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una pequeña historia 🌻</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Georgia, serif;
+    overflow-x: hidden;
+    background: #020617;
+    color: white;
+}
+
+/* =========================
+   ESPACIO
+========================= */
+
+.espacio {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(circle at center, #172554 0%, #020617 55%, #000 100%);
+}
+
+/* ESTRELLAS */
+
+.estrella {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 12px white;
+    animation: parpadear 2s infinite alternate;
+}
+
+.e1 { top: 10%; left: 10%; }
+.e2 { top: 20%; left: 80%; animation-delay: .5s; }
+.e3 { top: 70%; left: 15%; animation-delay: 1s; }
+.e4 { top: 80%; left: 85%; animation-delay: .3s; }
+.e5 { top: 35%; left: 50%; animation-delay: 1.5s; }
+.e6 { top: 60%; left: 70%; animation-delay: .8s; }
+.e7 { top: 15%; left: 45%; animation-delay: 1.2s; }
+.e8 { top: 90%; left: 40%; animation-delay: .7s; }
+
+@keyframes parpadear {
+    from {
+        opacity: .2;
+        transform: scale(.6);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+}
+
+/* LUZ */
+
+.luz {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 193, 7, .08);
+    border-radius: 50%;
+    filter: blur(70px);
+    animation: luz 5s infinite alternate;
+}
+
+@keyframes luz {
+    from {
+        transform: scale(.8);
+        opacity: .4;
+    }
+
+    to {
+        transform: scale(1.2);
+        opacity: .8;
+    }
+}
+
+/* PLANETAS */
+
+.planeta {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: inset -12px -12px 20px rgba(0,0,0,.25), 0 0 25px rgba(255,255,255,.15);
+    animation: flotarPlaneta 9s ease-in-out infinite;
+    z-index: 1;
+}
+
+.planeta::after {
+    content: "";
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.4);
+    top: 18%;
+    left: 20%;
+}
+
+.p1 {
+    width: 90px;
+    height: 90px;
+    top: 8%;
+    left: 10%;
+    background: radial-gradient(circle at 30% 30%, #f9d976, #d97706 64%, #7c2d12 100%);
+}
+
+.p2 {
+    width: 70px;
+    height: 70px;
+    top: 18%;
+    right: 14%;
+    background: radial-gradient(circle at 30% 30%, #c4b5fd, #7c3aed 62%, #312e81 100%);
+    animation-delay: 1.3s;
+}
+
+.p3 {
+    width: 110px;
+    height: 110px;
+    bottom: 15%;
+    left: 6%;
+    background: radial-gradient(circle at 30% 30%, #bfdbfe, #60a5fa 60%, #1d4ed8 100%);
+    animation-delay: 2.2s;
+}
+
+.p4 {
+    width: 55px;
+    height: 55px;
+    bottom: 20%;
+    right: 12%;
+    background: radial-gradient(circle at 30% 30%, #fbcfe8, #ec4899 60%, #831843 100%);
+    animation-delay: 0.8s;
+}
+
+@keyframes flotarPlaneta {
+    0%,100% {
+        transform: translateY(0px) translateX(0px);
+    }
+    50% {
+        transform: translateY(-18px) translateX(8px);
+    }
+}
+
+/* ESTRELLAS FUGACES */
+
+.meteoro {
+    position: absolute;
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.9), rgba(255,255,255,0));
+    border-radius: 50%;
+    transform: rotate(-25deg);
+    opacity: 0;
+    animation: caer 6s linear infinite;
+    z-index: 1;
+}
+
+.meteoro::before {
+    content: "";
+    position: absolute;
+    right: -8px;
+    top: -3px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 18px white;
+}
+
+.m1 { top: 16%; left: 16%; animation-delay: 1.5s; }
+.m2 { top: 30%; left: 62%; animation-delay: 3.2s; }
+.m3 { top: 55%; left: 26%; animation-delay: 5.3s; }
+
+@keyframes caer {
+    0% {
+        transform: translate(-30px, 0) rotate(-25deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(520px, 220px) rotate(-25deg);
+        opacity: 0;
+    }
+}
+
+/* =========================
+   LIBRO
+========================= */
+
+.contenedor-libro {
+    position: relative;
+    width: 360px;
+    max-width: 90%;
+    perspective: 1200px;
+    z-index: 5;
+}
+
+/* SOMBRA */
+
+.sombra-libro {
+    position: absolute;
+    width: 90%;
+    height: 30px;
+    left: 5%;
+    bottom: -35px;
+
+    background: rgba(0,0,0,.7);
+    filter: blur(18px);
+    border-radius: 50%;
+
+    animation: sombra 3s ease-in-out infinite;
+}
+
+@keyframes sombra {
+    0%,100% {
+        transform: scale(.9);
+        opacity: .5;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: .8;
+    }
+}
+
+/* LIBRO CERRADO */
+
+.libro-cerrado {
+    height: 480px;
+    border-radius: 8px 18px 18px 8px;
+
+    background:
+        linear-gradient(90deg,
+        #3b1608,
+        #8b4513 8%,
+        #6b2f0e 50%,
+        #4b1d08);
+
+    border: 5px solid #c58b32;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.7),
+        inset 0 0 30px rgba(0,0,0,.6);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    animation: flotar 3.5s ease-in-out infinite;
+
+    transition:
+        transform .8s ease,
+        opacity .8s ease;
+}
+
+@keyframes flotar {
+    0%,100% {
+        transform: translateY(0) rotateX(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotateX(2deg);
+    }
+}
+
+.libro-cerrado:hover {
+    transform: translateY(-15px) scale(1.03);
+}
+
+/* GIRASOL */
+
+.girasol {
+    font-size: 80px;
+    animation: girasol 4s ease-in-out infinite;
+}
+
+@keyframes girasol {
+    0%,100% {
+        transform: rotate(-5deg);
+    }
+
+    50% {
+        transform: rotate(5deg) scale(1.05);
+    }
+}
+
+.libro-cerrado h1 {
+    margin-top: 20px;
+    font-size: 28px;
+    color: #ffe082;
+}
+
+.libro-cerrado p {
+    margin-top: 12px;
+    color: #fff3cd;
+}
+
+.abrir {
+    margin-top: 30px;
+    padding: 12px 22px;
+
+    border: 1px solid #ffd54f;
+    border-radius: 30px;
+
+    background: rgba(255,193,7,.12);
+    color: #ffe082;
+
+    animation: pulso 2s infinite;
+}
+
+@keyframes pulso {
+    50% {
+        box-shadow: 0 0 25px rgba(255,193,7,.5);
+    }
+}
+
+/* =========================
+   LIBRO ABIERTO
+========================= */
+
+.libro-abierto {
+    display: none;
+
+    background: #fff8e7;
+    color: #3d260e;
+
+    min-height: 480px;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.8);
+
+    padding: 30px;
+
+    position: relative;
+
+    animation: aparecer 1s ease;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: scale(.8) rotateY(20deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotateY(0);
+    }
+}
+
+/* PAGINAS */
+
+.pagina {
+    display: none;
+    text-align: center;
+    min-height: 360px;
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    animation: pagina 0.6s ease;
+}
+
+.pagina.activa {
+    display: flex;
+}
+
+@keyframes pagina {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.pagina h2 {
+    color: #6b3d12;
+    margin-bottom: 20px;
+}
+
+.pagina p {
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+/* FRASE */
+
+.frase-programador {
+    margin-top: 20px;
+    padding: 20px;
+
+    background: #f5e4bc;
+    border-radius: 15px;
+
+    font-family: monospace;
+    font-size: 17px;
+
+    box-shadow: inset 0 0 15px rgba(0,0,0,.1);
+}
+
+/* =========================
+   VIDEO
+========================= */
+
+.video-contenedor {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.video-contenedor video {
+    width: 100%;
+    max-height: 240px;
+
+    border-radius: 15px;
+
+    background: #000;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.3);
+}
+
+.video-ayuda {
+    margin-top: 10px;
+    font-size: 13px !important;
+    color: #795548;
+}
+
+/* =========================
+   METRO DE AMISTAD
+========================= */
+
+input[type="range"] {
+    width: 90%;
+    margin: 25px 0;
+}
+
+.mensaje-amistad {
+    font-weight: bold;
+    color: #8b4513;
+}
+
+/* =========================
+   FORMULARIO
+========================= */
+
+form {
+    width: 100%;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+
+    padding: 12px;
+
+    border: 2px solid #d6b77c;
+    border-radius: 12px;
+
+    resize: none;
+
+    font-family: Georgia, serif;
+
+    margin-bottom: 15px;
+}
+
+button {
+    border: none;
+    padding: 12px 20px;
+
+    border-radius: 25px;
+
+    background: #8b4513;
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    transition: .3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: #a95b1b;
+}
+
+.opciones-pregunta,
+.juego-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.opcion-pregunta,
+.juego-opcion {
+    background: #f8e6b1;
+    color: #4a2b0f;
+    border: 1px solid #d8af52;
+    width: 100%;
+    font-weight: bold;
+}
+
+.resultado-pregunta,
+.resultado-juego {
+    margin-top: 18px;
+    color: #6a3f18;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.botones {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.botones button {
+    flex: 1;
+}
+
+/* =========================
+   MUSICA
+========================= */
+
+.control-musica {
+    position: fixed;
+
+    bottom: 20px;
+    right: 20px;
+
+    z-index: 20;
+}
+
+.control-musica button {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 50%;
+
+    background: rgba(139,69,19,.9);
+
+    box-shadow: 0 5px 20px rgba(0,0,0,.4);
+
+    font-size: 20px;
+}
+
+/* =========================
+   MOVIL
+========================= */
+
+@media (max-width: 600px) {
+
+    .contenedor-libro {
+        width: 92%;
+    }
+
+    .libro-cerrado {
+        height: 440px;
+    }
+
+    .libro-cerrado h1 {
+        font-size: 24px;
+    }
+
+    .girasol {
+        font-size: 65px;
+    }
+
+    .libro-abierto {
+        padding: 20px;
+        min-height: 500px;
+    }
+
+    .pagina {
+        min-height: 400px;
+    }
+
+    .pagina p {
+        font-size: 16px;
+    }
+
+    .frase-programador {
+        font-size: 14px;
+    }
+
+    .botones button {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .video-contenedor video {
+        max-height: 220px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="espacio">
+
+    <div class="estrella e1"></div>
+    <div class="estrella e2"></div>
+    <div class="estrella e3"></div>
+    <div class="estrella e4"></div>
+    <div class="estrella e5"></div>
+    <div class="estrella e6"></div>
+    <div class="estrella e7"></div>
+    <div class="estrella e8"></div>
+
+    <div class="luz"></div>
+
+    <div class="planeta p1"></div>
+    <div class="planeta p2"></div>
+    <div class="planeta p3"></div>
+    <div class="planeta p4"></div>
+
+    <div class="meteoro m1"></div>
+    <div class="meteoro m2"></div>
+    <div class="meteoro m3"></div>
+
+    <div class="contenedor-libro">
+
+        <div class="sombra-libro"></div>
+
+        <!-- =====================
+             LIBRO CERRADO
+        ====================== -->
+
+        <div
+            class="libro-cerrado"
+            id="libroCerrado"
+            onclick="abrirLibro()"
+        >
+
+            <div class="girasol">🌻</div>
+
+            <h1>
+                Una pequeña historia
+            </h1>
+
+            <p>
+                Para mi amiga, Leydi
+            </p>
+
+            <div class="abrir">
+                📖 Abrir libro
+            </div>
+
+        </div>
+
+
+        <!-- =====================
+             LIBRO ABIERTO
+        ====================== -->
+
+        <div
+            class="libro-abierto"
+            id="libroAbierto"
+        >
+
+            <!-- PAGINA 1 -->
+
+            <section class="pagina activa">
+
+                <h2>
+                    🌻 Bienvenida
+                </h2>
+
+                <p>
+                    Hay historias que no necesitan ser enormes
+                    para convertirse en recuerdos bonitos.
+                </p>
+
+                <p style="margin-top:20px;">
+                    Esta es simplemente una pequeña historia
+                    hecha con código, tiempo y un poquito de imaginación. 💻✨
+                </p>
+
+            </section>
+
+
+            <!-- PAGINA 2 -->
+
+            <section class="pagina">
+
+                <h2>
+                    📖 Capítulo 1
+                </h2>
+
+                <div class="girasol">
+                    🌻
+                </div>
+
+                <p>
+                    A veces una persona aparece en nuestra vida
+                    y termina formando parte de momentos que
+                    no esperábamos guardar.
+                </p>
+
+            </section>
+
+
+            <!-- PAGINA 3 -->
+
+            <section class="pagina">
+
+                <h2>
+                    💻 Una frase
+                </h2>
+
+                <div class="frase-programador">
+
+                    “Entre tantos códigos, qué raro que siempre
+                    termine encontrando la misma variable: tú.” 💻
+
+                </div>
+
+            </section>
+
+
+            <!-- PAGINA 4 -->
+
+            <section class="pagina">
+
+                <h2>
+                    🎬 Un pequeño detalle
+                </h2>
+
+                <p>
+                    Encontré algo que pensé que podría gustarte.
+                </p>
+
+                <div class="video-contenedor">
+
+                    <!--
+                    ==========================================
+                    VIDEO PARA TI
+
+                    Pon tu video en la misma carpeta que
+                    index.html y llámalo:
+
+                    video.mp4
+
+                    Si quieres cambiar el nombre, modifica
+                    solamente "video.mp4" aquí abajo.
+                    ==========================================
+                    -->
+
+                    <video controls playsinline>
+
+                        <source
+                            src="Video.mp4/Ricardo Arjona ft. Gaby Moreno - Fuiste Tú - Letra.mp4"
+                            type="video/mp4"
+                        >
+
+                        Tu navegador no puede reproducir este video.
+
+                    </video>
+
+                </div>
+
+                <p class="video-ayuda">
+                    ✨ Guarda tu video en la misma carpeta con el nombre video.mp4
+                </p>
+
+            </section>
+
+
+            <!-- PAGINA 5 -->
+
+            <section class="pagina">
+
+                <h2>
+                    🤝 Medidor de amistad
+                </h2>
+
+                <p>
+                    ¿Qué tan buena está nuestra amistad?
+                </p>
+
+                <input
+                    type="range"
+                    id="amistad"
+                    min="0"
+                    max="100"
+                    value="80"
+                >
+
+                <div
+                    class="mensaje-amistad"
+                    id="mensajeAmistad"
+                >
+                    80% — Nada mal 😄
+                </div>
+
+            </section>
+
+
+            <!-- PAGINA 6 -->
+
+            <section class="pagina">
+
+                <h2>
+                    💭 Pregunta rápida
+                </h2>
+
+                <p>
+                    Si tuvieras que elegir un lugar para estar tranquila, ¿dónde irías?
+                </p>
+
+                <div class="opciones-pregunta">
+                    <button class="opcion-pregunta" type="button" data-respuesta="Bajo las estrellas">
+                        🌙 Bajo las estrellas
+                    </button>
+
+                    <button class="opcion-pregunta" type="button" data-respuesta="En un jardín lleno de flores">
+                        🌼 En un jardín
+                    </button>
+
+                    <button class="opcion-pregunta" type="button" data-respuesta="En cualquier lugar contigo">
+                        💛 Contigo
+                    </button>
+                </div>
+
+                <p id="resultadoPregunta" class="resultado-pregunta">
+                    Mi respuesta favorita es... 💫
+                </p>
+
+            </section>
+
+
+            <!-- PAGINA 7 -->
+
+            <section class="pagina">
+
+                <h2>
+                    🎮 Juego del universo
+                </h2>
+
+                <p>
+                    ¿Qué te hace sonreír más en este momento?
+                </p>
+
+                <div class="juego-opciones">
+                    <button class="juego-opcion" type="button" data-correcto="true">
+                        🌟 Una sonrisa sincera
+                    </button>
+
+                    <button class="juego-opcion" type="button" data-correcto="false">
+                        🌙 Mirar el cielo
+                    </button>
+
+                    <button class="juego-opcion" type="button" data-correcto="false">
+                        ✨ Una historia bonita
+                    </button>
+                </div>
+
+                <p id="resultadoJuego" class="resultado-juego">
+                    Tú decides el puntaje del momento. 🌈
+                </p>
+
+            </section>
+
+
+            <!-- PAGINA 8 -->
+
+            <section class="pagina">
+
+                <h2>
+                    💭 Dos preguntas
+                </h2>
+
+                <form
+                    action="https://formsubmit.co/katanfredy@gmail.com"
+                    method="POST"
+                    onsubmit="mostrarEnvio()"
+                >
+
+                    <input
+                        type="hidden"
+                        name="_subject"
+                        value="Respuestas del libro 🌻"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="_captcha"
+                        value="false"
+                    >
+
+                    <input
+                        type="hidden"
+                        name="_template"
+                        value="table"
+                    >
+
+                    <p>
+                        ¿Qué piensas cuando estás sola?
+                    </p>
+
+                    <textarea
+                        name="Pensamiento"
+                        placeholder="Escribe aquí..."
+                        required
+                    ></textarea>
+
+
+                    <p>
+                        ¿Qué cosas te hacen sentir feliz?
+                    </p>
+
+                    <textarea
+                        name="Felicidad"
+                        placeholder="Escribe aquí..."
+                        required
+                    ></textarea>
+
+
+                    <button type="submit">
+                        💌 Enviar respuestas
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- PAGINA 9 -->
+
+            <section class="pagina">
+
+                <h2>
+                    🌻 Fin
+                </h2>
+
+                <div class="girasol">
+                    🌻
+                </div>
+
+                <p>
+                    Gracias por llegar hasta el final.
+                </p>
+
+                <p style="margin-top:15px;">
+                    Y recuerda...
+                </p>
+
+                <p style="margin-top:15px;">
+                    algunas de las mejores historias
+                    empiezan sin saber cómo van a terminar. ✨
+                </p>
+
+            </section>
+
+
+            <!-- BOTONES -->
+
+            <div class="botones">
+
+                <button onclick="anterior()">
+                    ← Anterior
+                </button>
+
+                <button onclick="siguiente()">
+                    Siguiente →
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================
+     MUSICA
+====================== -->
+
+<audio
+    id="musica"
+    loop
+>
+
+    <source
+        src="musica.mp3/Música de Piano Sentimental 🎵 Música de Fondo para Videos - Música para bodas [0zlwqCvAlwU].mp3"
+        type="audio/mpeg"
+    >
+
+</audio>
+
+
+<!-- CONTROL DE MUSICA -->
+
+<div class="control-musica">
+
+    <button
+        id="botonMusica"
+        onclick="alternarMusica()"
+    >
+        🎵
+    </button>
+
+</div>
+
+
+<script>
+
+/* =========================
+   ABRIR LIBRO
+========================= */
+
+function abrirLibro() {
+
+    const cerrado =
+        document.getElementById("libroCerrado");
+
+    const abierto =
+        document.getElementById("libroAbierto");
+
+    const musica =
+        document.getElementById("musica");
+
+
+    /* MÚSICA */
+
+    musica.volume = 0.45;
+
+    musica.play().catch(function() {
+        console.log("El navegador bloqueó el audio automático.");
+    });
+
+
+    /* ANIMACIÓN DEL LIBRO */
+
+    cerrado.style.transform =
+        "rotateY(-90deg) scale(.8)";
+
+    cerrado.style.opacity = "0";
+
+
+    setTimeout(function() {
+
+        cerrado.style.display = "none";
+
+        abierto.style.display = "block";
+
+    }, 700);
+}
+
+
+/* =========================
+   PAGINAS
+========================= */
+
+let paginaActual = 0;
+
+const paginas =
+    document.querySelectorAll(".pagina");
+
+
+function mostrarPagina() {
+
+    paginas.forEach(function(pagina, indice) {
+
+        pagina.classList.remove("activa");
+
+        if (indice === paginaActual) {
+
+            pagina.classList.add("activa");
+
+        }
+
+    });
+
+}
+
+
+function siguiente() {
+
+    if (paginaActual < paginas.length - 1) {
+
+        paginaActual++;
+
+        mostrarPagina();
+
+    }
+
+}
+
+
+function anterior() {
+
+    if (paginaActual > 0) {
+
+        paginaActual--;
+
+        mostrarPagina();
+
+    }
+
+}
+
+
+/* =========================
+   MEDIDOR DE AMISTAD
+========================= */
+
+const amistad =
+    document.getElementById("amistad");
+
+const mensajeAmistad =
+    document.getElementById("mensajeAmistad");
+
+
+amistad.addEventListener("input", function() {
+
+    const valor = amistad.value;
+
+    if (valor < 30) {
+
+        mensajeAmistad.textContent =
+            valor + "% — Hay que mejorar 😅";
+
+    }
+
+    else if (valor < 70) {
+
+        mensajeAmistad.textContent =
+            valor + "% — Vamos bastante bien 😄";
+
+    }
+
+    else if (valor < 90) {
+
+        mensajeAmistad.textContent =
+            valor + "% — Muy buena amistad 🌻";
+
+    }
+
+    else {
+
+        mensajeAmistad.textContent =
+            valor + "% — Nivel legendario 😂🌻";
+
+    }
+
+});
+
+
+/* =========================
+   PREGUNTA RÁPIDA
+========================= */
+
+const opcionesPregunta = document.querySelectorAll(".opcion-pregunta");
+const resultadoPregunta = document.getElementById("resultadoPregunta");
+
+opcionesPregunta.forEach(function(boton) {
+    boton.addEventListener("click", function() {
+        resultadoPregunta.textContent = "Elegiste: " + boton.dataset.respuesta + " 💫";
+    });
+});
+
+
+/* =========================
+   JUEGO DEL UNIVERSO
+========================= */
+
+const opcionesJuego = document.querySelectorAll(".juego-opcion");
+const resultadoJuego = document.getElementById("resultadoJuego");
+
+opcionesJuego.forEach(function(boton) {
+    boton.addEventListener("click", function() {
+        if (boton.dataset.correcto === "true") {
+            resultadoJuego.textContent = "¡Correcto! Esa sonrisa siempre gana. 🌻✨";
+        } else {
+            resultadoJuego.textContent = "Casi... la respuesta más bonita es una sonrisa sincera. ✨";
+        }
+    });
+});
+
+
+/* =========================
+   MUSICA PLAY / PAUSA
+========================= */
+
+function alternarMusica() {
+
+    const musica =
+        document.getElementById("musica");
+
+    const boton =
+        document.getElementById("botonMusica");
+
+
+    if (musica.paused) {
+
+        musica.play();
+
+        boton.textContent = "🔊";
+
+    }
+
+    else {
+
+        musica.pause();
+
+        boton.textContent = "🔇";
+
+    }
+
+}
+
+
+/* =========================
+   ENVIO DEL FORMULARIO
+========================= */
+
+function mostrarEnvio() {
+
+    setTimeout(function() {
+
+        alert(
+            "💌 Tus respuestas fueron enviadas. Gracias por responder 🌻"
+        );
+
+    }, 300);
+
+}
+
+</script>
+
+</body>
+</html>
+```
